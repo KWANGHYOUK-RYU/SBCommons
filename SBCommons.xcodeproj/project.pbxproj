@@ -27,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C886DB71CA600A30026E5F4 /* SBCommons.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SBCommons.playground; sourceTree = "<group>"; };
 		3CE5D17C1C136B1300550AD6 /* SBCommons.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SBCommons.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CE5D17F1C136B1300550AD6 /* SBCommons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBCommons.h; sourceTree = "<group>"; };
 		3CE5D1811C136B1300550AD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -66,6 +67,7 @@
 		3CE5D1721C136B1300550AD6 = {
 			isa = PBXGroup;
 			children = (
+				3C886DB71CA600A30026E5F4 /* SBCommons.playground */,
 				3CE5D17E1C136B1300550AD6 /* Sources */,
 				3CE5D18A1C136B1300550AD6 /* Tests */,
 				3CE5D1A61C136E0A00550AD6 /* Share */,
