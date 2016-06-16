@@ -5,15 +5,16 @@
 //  Created by Ed Gamble on 10/22/15.
 //  Copyright © 2015 Opus Logica Inc. All rights reserved.
 //
-import XCTest
 @testable import SBCommons
+import XCTest
+import Foundation
 
-enum TestError: ErrorType {
-  case One
-  case Two
-}
+class ResultTests: XCTestCase {
 
-class ResultTest: XCTestCase {
+  enum TestError: ErrorProtocol {
+    case one
+    case two
+  }
   
   override func setUp() {
     super.setUp()
@@ -26,26 +27,36 @@ class ResultTest: XCTestCase {
   }
   
   func testResultOne() {
-    let r1 : Result<Int,TestError> = Result.Success(10)
+    let r1 : Result<Int,TestError> = Result.success(10)
 
     XCTAssertTrue(nil != r1.value)
     XCTAssertEqual(10, r1.valueOrOther(0))
 
-    let r2 : Result<Int,TestError> = Result.Failure(TestError.One)
+    let r2 : Result<Int,TestError> = Result.failure(TestError.one)
     
     XCTAssertTrue(nil == r2.value)
     XCTAssertEqual(10, r2.valueOrOther(10))
     
-    let r3 : Result<Int,TestError> = Result.Success(1)
+    let r3 : Result<Int,TestError> = Result.success(1)
     
     XCTAssertEqual(100, r3.map { (v:Int) -> Int in return 100 }.valueOrOther(0))
 
-    _ = Result<Int,TestError>.Success(1)
+    _ = Result<Int,TestError>.success(1)
     
     //    XCTAssertEqual(r4, Result<Int,TestError>.Success)
     
     // This is an example of a functional test case.
     // Use XCTAssert and related functions to verify your tests produce the correct results.
   }
-  
 }
+
+
+#if os(Linux)
+extension ResultTests: XCTestCaseProvider {
+  var allTests : [(String, () throws -> Void)] {
+    return [
+      ("testResultOne", testResultOne)
+    ]
+  }
+}
+#endif

@@ -42,13 +42,13 @@ public struct AsComparable<Value:Comparable, Item> : Comparable {
   /** The arbitrary item */
   public var item: Item
   
-  public init (value: Value, item: Item) {
+  public init (item: Item, value: Value) {
     self.value  = value
     self.item   = item
   }
   
   public init (item: Item, toValue: (Item) -> Value) {
-    self.init (value: toValue(item), item: item)
+    self.init (item: item, value: toValue(item))
   }
 }
 
@@ -69,7 +69,7 @@ public struct AsComparableInvert<Value:Comparable> : Comparable {
   public var value : Value
   
   public init (value: Value) {
-    self.value   = value
+    self.value = value
   }
 }
 
@@ -78,7 +78,7 @@ public func == <Value:Comparable> (lhs:AsComparableInvert<Value>, rhs:AsComparab
 }
 
 public func < <Value:Comparable> (lhs:AsComparableInvert<Value>, rhs:AsComparableInvert<Value>) -> Bool {
-  return lhs.value > rhs.value
+  return !(lhs.value < rhs.value)
 }
 
 // MARK: AsHashable
@@ -92,13 +92,13 @@ public struct AsHashable<Value:Hashable, Item> : Hashable {
   /** The arbitrary item */
   public var item: Item
   
-  public init (value: Value, item: Item) {
+  public init (item: Item, value: Value) {
     self.value = value
     self.item  = item
   }
   
   public init (item: Item, toValue: (Item) -> Value) {
-    self.init (value: toValue(item), item: item)
+    self.init (item: item, value: toValue(item))
   }
   
   public var hashValue : Int {

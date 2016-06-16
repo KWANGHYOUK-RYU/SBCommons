@@ -13,7 +13,7 @@
  *
  * - returns: A function
  */
-func Y<T, R> (f: (T -> R) -> (T -> R)) -> (T -> R) {
+func Y<T, R> (_ f: ((T) -> R) -> ((T) -> R)) -> ((T) -> R) {
   return { t in f(Y(f))(t) }
 }
 
@@ -31,7 +31,7 @@ let factorial = Y {
  *
  * - returns: A function of (y:T) that (always) return x
  */
-public func always<T> (x:T) -> (y:T) -> T {
+public func always<T> (_ x:T) -> (y:T) -> T {
   return { (y:T) in return x }
 }
 
@@ -42,7 +42,7 @@ public func always<T> (x:T) -> (y:T) -> T {
  *
  * - returns: A function as !pred
  */
-public func complement<T> (pred : (T) -> Bool) -> (T) -> Bool {
+public func complement<T> (_ pred : (T) -> Bool) -> (T) -> Bool {
   return { (x:T) in return !pred(x) }
 }
 
@@ -54,7 +54,7 @@ public func complement<T> (pred : (T) -> Bool) -> (T) -> Bool {
  *
  * - returns: a function of `x:T` returning `f(g(x))`
  */
-public func compose<T, U, V> (f f: (U) -> V, g: (T) -> U) -> (T) -> V {
+public func compose<T, U, V> (f: (U) -> V, g: (T) -> U) -> (T) -> V {
   return { (x:T) in f (g (x)) }
 }
 
@@ -66,7 +66,7 @@ public func compose<T, U, V> (f f: (U) -> V, g: (T) -> U) -> (T) -> V {
  *
  * - returns: A function of `x:T` that returns pred1(x) || pred2(x)
  */
-public func disjoin<T> (pred1 pred1: (T) -> Bool, pred2: (T) -> Bool) -> (T) -> Bool {
+public func disjoin<T> (pred1: (T) -> Bool, pred2: (T) -> Bool) -> (T) -> Bool {
   return { (x:T) in pred1 (x) || pred2 (x) }
 }
 
@@ -78,7 +78,7 @@ public func disjoin<T> (pred1 pred1: (T) -> Bool, pred2: (T) -> Bool) -> (T) -> 
  *
  * - returns: A function of `x:T` that returns pred1(x) && pred2(x)
  */
-public func conjoin<T> (pred1 pred1: (T) -> Bool, pred2: (T) -> Bool) -> (T) -> Bool {
+public func conjoin<T> (pred1: (T) -> Bool, pred2: (T) -> Bool) -> (T) -> Bool {
   return { (x:T) in pred1 (x) && pred2 (x) }
 }
 
@@ -90,26 +90,26 @@ public func conjoin<T> (pred1 pred1: (T) -> Bool, pred2: (T) -> Bool) -> (T) -> 
  *
  * - returns: A function of (y:T) that returns pred(x,y)
  */
-public func equalTo<T> (pred pred: (T, T) -> Bool, x:T) -> (T) -> Bool {
+public func equalTo<T> (pred: (T, T) -> Bool, x:T) -> (T) -> Bool {
   return { (y:T) in return pred (x, y) }
 }
 
 // MARK: - Sequence App Type
 
-public protocol SequenceAppType : SequenceType {
+public protocol SequenceAppType : Sequence {
   /** Think different: renaming of `forEach` to be analogous to `map` */
-  func app (@noescape body: (Self.Generator.Element) -> Void) -> Void
+  func app ( _ body: @noescape(Self.Iterator.Element) -> Void) -> Void
 }
 
-extension SequenceType {
-  public func app (@noescape body: (Self.Generator.Element) throws -> Void) rethrows -> Void {
+extension Sequence {
+  public func app (_ body: @noescape(Self.Iterator.Element) throws -> Void) rethrows -> Void {
     for item in self { try body (item) }
   }
 }
 
 // MARK: Sequence Logic Type
 
-public protocol SequenceLogicType : SequenceType {
+public protocol SequenceLogicType : Sequence {
   
   /**
    * Check if any element satisfies `predicate`.
@@ -118,7 +118,7 @@ public protocol SequenceLogicType : SequenceType {
    *
    * - returns: `true` if any element satisfies `predicate`; `false` otherwise
    */
-  func any (@noescape predicate: (Self.Generator.Element) throws -> Bool) rethrows -> Bool
+  func any (_ predicate: @noescape(Self.Iterator.Element) throws -> Bool) rethrows -> Bool
   
   /**
    * Check if all elements satisfy `predicate`.
@@ -127,19 +127,19 @@ public protocol SequenceLogicType : SequenceType {
    *
    * - returns: `true` if all elements satisfy `predicate`; `false` otherwise
    */
-  func all (@noescape predicate: (Self.Generator.Element) throws -> Bool) rethrows -> Bool
+  func all (_ predicate: @noescape(Self.Iterator.Element) throws -> Bool) rethrows -> Bool
 }
 
-extension SequenceType {
+extension Sequence {
   
-  public func any (@noescape predicate: (Self.Generator.Element) throws -> Bool) rethrows -> Bool {
+  public func any (_ predicate: @noescape(Self.Iterator.Element) throws -> Bool) rethrows -> Bool {
     for elt in self {
       if (try predicate (elt)) { return true }
     }
     return false
   }
   
-  public func all (@noescape predicate: (Self.Generator.Element) throws -> Bool) rethrows -> Bool {
+  public func all (_ predicate: @noescape(Self.Iterator.Element) throws -> Bool) rethrows -> Bool {
     for elt in self {
       if (try !predicate (elt)) { return false }
     }
@@ -149,7 +149,7 @@ extension SequenceType {
 
 // MARK: Sequence Scan Type
 
-public protocol SequenceScanType : SequenceType {
+public protocol SequenceScanType : Sequence {
   /**
    * Scan `self` element by element combining elements.  Resulting array has one element more
    * than `self`.
@@ -159,12 +159,12 @@ public protocol SequenceScanType : SequenceType {
    *
    * - retuns: array with scanned elements
    */
-  func scan <R> (initial: R, combine: (R, Generator.Element) -> R) -> [R]
+  func scan <R> (_ initial: R, combine: (R, Iterator.Element) -> R) -> [R]
 }
 
-extension SequenceType {
-  func scan <R> (initial: R, combine: (R, Generator.Element) -> R) -> [R] {
-    var result = Array<R> (count: 1, repeatedValue: initial)
+extension Sequence {
+  func scan <R> (_ initial: R, combine: (R, Iterator.Element) -> R) -> [R] {
+    var result = Array<R> (repeating: initial, count: 1)
     var accum = initial
     
     for elt in self {
@@ -187,7 +187,7 @@ extension SequenceType {
  *
  * - returns: A function of (y:T) that returns predicate(x,y)
  */
-public func equateUsing<T> (predicate: (T, T) -> Bool) -> (T) -> (T) -> Bool {
+public func equateUsing<T> (_ predicate: (T, T) -> Bool) -> (T) -> (T) -> Bool {
   return { (x:T) -> (T) -> Bool in
     return { (y:T) -> Bool in
       return predicate (x, y) }
@@ -195,28 +195,28 @@ public func equateUsing<T> (predicate: (T, T) -> Bool) -> (T) -> (T) -> Bool {
 }
 
 /** Curry `any()` using `predicate` */
-public func anyUsing <S: SequenceType> (predicate: (S.Generator.Element) -> Bool) -> (S) -> Bool {
+public func anyUsing <S: Sequence> (_ predicate: (S.Iterator.Element) -> Bool) -> (S) -> Bool {
   return { (source:S) -> Bool in
     return source.any (predicate)
   }
 }
 
 /** Curry `all()` using `predicate`. */
-public func allUsing <S: SequenceType> (predicate: (S.Generator.Element) -> Bool) -> (S) -> Bool {
+public func allUsing <S: Sequence> (_ predicate: (S.Iterator.Element) -> Bool) -> (S) -> Bool {
   return { (source:S) -> Bool in
     return source.all (predicate)
   }
 }
 
 /** Curry `map()` using `transform`. */
-public func mapUsing <S: SequenceType, T> (transform: (S.Generator.Element) -> T) -> (S) -> [T] {
+public func mapUsing <S: Sequence, T> (_ transform: (S.Iterator.Element) -> T) -> (S) -> [T] {
   return { (source:S) in
     return source.map (transform)
   }
 }
 
 /** Curry `app()` using `body`. */
-public func appUsing <S: SequenceType> (body: (S.Generator.Element) -> Void) -> (S) -> Void {
+public func appUsing <S: Sequence> (_ body: (S.Iterator.Element) -> Void) -> (S) -> Void {
   return { (source:S) in
     return source.app (body)
   }

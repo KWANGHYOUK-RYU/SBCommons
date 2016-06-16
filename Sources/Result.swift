@@ -9,36 +9,36 @@
 /**
  * A variant type with an arbitrary `value` on Success or an `error` on Failure.
  */
-public enum Result<V,E:ErrorType> : CustomStringConvertible, CustomDebugStringConvertible {
-  case Success(V)
-  case Failure(E)
+public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStringConvertible {
+  case success(V)
+  case failure(E)
 
   /** Apply `f` to the `Result` value returning the result; otherwise return error */
-  public func map<P>(@noescape f: V -> P) -> Result<P,E> {
+  public func map<P>( _ f: @noescape(V) -> P) -> Result<P,E> {
     switch self {
-    case Success(let value):
-      return .Success(f(value))
-    case Failure(let error):
-      return .Failure(error)
+    case success(let value):
+      return .success(f(value))
+    case failure(let error):
+      return .failure(error)
     }
   }
 
   /** Apply `f` to the `Result` value returning the result; otherwsise return error */
-  public func flatMap<P> (@noescape f: V -> Result<P,E>) -> Result<P,E> {
+  public func flatMap<P> ( _ f: @noescape(V) -> Result<P,E>) -> Result<P,E> {
     switch self {
-    case Success(let value):
+    case success(let value):
       return f (value)
-    case Failure(let error):
-      return .Failure(error)
+    case failure(let error):
+      return .failure(error)
     }
   }
   
   /** Return the `Result` value otherwise Optional.None */
   public var value : V? {
     switch self {
-    case Success(let value):
+    case success(let value):
       return value
-    case Failure:
+    case failure:
       return nil;
     }
   }
@@ -46,29 +46,29 @@ public enum Result<V,E:ErrorType> : CustomStringConvertible, CustomDebugStringCo
   /** Return the `Result` value otherwise throw the `Result` error */
   public func valueOrThrow () throws -> V {
     switch self {
-    case Success(let value):
+    case success(let value):
       return value
-    case Failure(let error):
+    case failure(let error):
       throw error
     }
   }
 
   /** Return the `Result` value otherwise return the value returned by `other` */
-  public func valueOrOther (@autoclosure other: () -> V) -> V {
+  public func valueOrOther ( _ other: @autoclosure() -> V) -> V {
     switch self {
-    case Success(let value):
+    case success(let value):
       return value
-    case Failure:
+    case failure:
       return other()
     }
   }
 
   /** Return `Result` if it has a value otherwise return the result returned by `otherwise` */
-  public func otherwise (@autoclosure other: () -> Result<V,E>) -> Result<V,E> {
+  public func otherwise ( _ other: @autoclosure() -> Result<V,E>) -> Result<V,E> {
     switch self {
-    case Success:
+    case success:
       return self
-    case Failure:
+    case failure:
       return other()
     }
   }
@@ -76,9 +76,9 @@ public enum Result<V,E:ErrorType> : CustomStringConvertible, CustomDebugStringCo
   /** Return the `Result` error otherwise Optional.None */
   public var error : E? {
     switch self {
-    case Success:
+    case success:
       return nil
-    case Failure(let e):
+    case failure(let e):
       return e
     }
   }
@@ -90,10 +90,10 @@ public enum Result<V,E:ErrorType> : CustomStringConvertible, CustomDebugStringCo
    *
    * - returns: A function of (V!, E!) that applies `f` to `E` or to `V`.
    */
-  public static func handler (f:Result<V,E> -> Void) -> (V!, E!) -> Void {
-    return { (value:V!, error:E!) in
-      if nil != error { f (Result.Failure(error)) }
-      if nil != value { f (Result.Success(value)) }
+  public static func handler (_ f:(Result<V,E>) -> Void) -> (V?, E?) -> Void {
+    return { (value:V?, error:E?) in
+      if nil != error { f (Result.failure(error!)) }
+      if nil != value { f (Result.success(value!)) }
       preconditionFailure("V! and E! both nil")
     }
   }
@@ -102,9 +102,9 @@ public enum Result<V,E:ErrorType> : CustomStringConvertible, CustomDebugStringCo
   
   public var description : String {
     switch self {
-    case Success(let v):
+    case success(let v):
       return "Result.Success(\(v))"
-    case Failure(let e):
+    case failure(let e):
       return "Result.Failure(\(e))"
     }
   }

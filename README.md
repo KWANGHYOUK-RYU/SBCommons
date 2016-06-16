@@ -29,9 +29,9 @@ Additional functions include `any` and `all` on `SequenceType` and a set of func
 predicate and returning functions of a `SequenceType` as: `allUsing`, `anyUsing`, `mapUsing` and
 `appUsing`.
 
-### As<Protocol>, Any<Protocol>
+### As, Any Protocols
 
-The As<Protocol> pattern allows any `Item`, with a property satisfying a protocol, to 'adopt' that
+The `As<Protocol>` pattern allows any `Item`, with a property satisfying a protocol, to 'adopt' that
 protocol.  For example, consider a `Person` abstraction with properties: ssn, name and age (in
 years):
 
@@ -58,7 +58,7 @@ let younger = min(AsComparable (value: p1.age, item: p1), AsComparable (value: p
 younger.name // => "Zoey"
 ```
 
-The As<Protocol> is implemented for three common Swift protocols as `AsEquatable`, `AsComparable`,
+The `As<Protocol>` is implemented for three common Swift protocols as `AsEquatable`, `AsComparable`,
 and `AsHashable`.  `AsComparableInvert` is also provided.
 
 ### Result
@@ -115,5 +115,5 @@ pod 'SBCommons', '~> 0.1'
 $ git clone https://github.com/EBGToo/SBCommons.git SBCommons
 ```
 
-Add the `SBCommons` Xcode Project to your Xcode Workspace.
+Add the SBCommons Xcode Project to your Xcode Workspace.
 

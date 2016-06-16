@@ -5,14 +5,15 @@
 //  Created by Ed Gamble on 11/27/15.
 //  Copyright © 2015 Opus Logica Inc. All rights reserved.
 //
-import XCTest
 @testable import SBCommons
+import XCTest
+import Foundation
 
-func allEven <S:SequenceType where Int == S.Generator.Element> (source: S) -> Bool {
-  return source.all { 0 == $0 % 2 }
-}
+class FuncTests: XCTestCase {
 
-class FuncTest: XCTestCase {
+  func allEven <S:Sequence where Int == S.Iterator.Element> (_ source: S) -> Bool {
+    return source.all { 0 == $0 % 2 }
+  }
   
   override func setUp() {
     super.setUp()
@@ -111,7 +112,17 @@ class FuncTest: XCTestCase {
   }
 
   func testPerformanceExample() {
-    self.measureBlock {
+    self.measure {
     }
   }
 }
+
+#if os(Linux)
+extension FuncTests: XCTestCaseProvider {
+  var allTests : [(String, () throws -> Void)] {
+    return [
+      ("testAppUsing", testAppUsing)
+    ]
+  }
+}
+#endif
