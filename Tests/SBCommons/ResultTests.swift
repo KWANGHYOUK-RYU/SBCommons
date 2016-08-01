@@ -11,7 +11,7 @@ import Foundation
 
 class ResultTests: XCTestCase {
 
-  enum TestError: ErrorProtocol {
+  enum TestError: Error {
     case one
     case two
   }

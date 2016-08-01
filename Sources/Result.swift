@@ -9,16 +9,16 @@
 /**
  * A variant type with an arbitrary `value` on Success or an `error` on Failure.
  */
-public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStringConvertible {
+public enum Result<V,E:Error> : CustomStringConvertible, CustomDebugStringConvertible {
   case success(V)
   case failure(E)
 
   /** Apply `f` to the `Result` value returning the result; otherwise return error */
   public func map<P>( _ f: @noescape(V) -> P) -> Result<P,E> {
     switch self {
-    case success(let value):
+    case .success(let value):
       return .success(f(value))
-    case failure(let error):
+    case .failure(let error):
       return .failure(error)
     }
   }
@@ -26,9 +26,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   /** Apply `f` to the `Result` value returning the result; otherwsise return error */
   public func flatMap<P> ( _ f: @noescape(V) -> Result<P,E>) -> Result<P,E> {
     switch self {
-    case success(let value):
+    case .success(let value):
       return f (value)
-    case failure(let error):
+    case .failure(let error):
       return .failure(error)
     }
   }
@@ -36,9 +36,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   /** Return the `Result` value otherwise Optional.None */
   public var value : V? {
     switch self {
-    case success(let value):
+    case .success(let value):
       return value
-    case failure:
+    case .failure:
       return nil;
     }
   }
@@ -46,9 +46,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   /** Return the `Result` value otherwise throw the `Result` error */
   public func valueOrThrow () throws -> V {
     switch self {
-    case success(let value):
+    case .success(let value):
       return value
-    case failure(let error):
+    case .failure(let error):
       throw error
     }
   }
@@ -56,9 +56,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   /** Return the `Result` value otherwise return the value returned by `other` */
   public func valueOrOther ( _ other: @autoclosure() -> V) -> V {
     switch self {
-    case success(let value):
+    case .success(let value):
       return value
-    case failure:
+    case .failure:
       return other()
     }
   }
@@ -66,9 +66,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   /** Return `Result` if it has a value otherwise return the result returned by `otherwise` */
   public func otherwise ( _ other: @autoclosure() -> Result<V,E>) -> Result<V,E> {
     switch self {
-    case success:
+    case .success:
       return self
-    case failure:
+    case .failure:
       return other()
     }
   }
@@ -76,9 +76,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   /** Return the `Result` error otherwise Optional.None */
   public var error : E? {
     switch self {
-    case success:
+    case .success:
       return nil
-    case failure(let e):
+    case .failure(let e):
       return e
     }
   }
@@ -102,9 +102,9 @@ public enum Result<V,E:ErrorProtocol> : CustomStringConvertible, CustomDebugStri
   
   public var description : String {
     switch self {
-    case success(let v):
+    case .success(let v):
       return "Result.Success(\(v))"
-    case failure(let e):
+    case .failure(let e):
       return "Result.Failure(\(e))"
     }
   }
