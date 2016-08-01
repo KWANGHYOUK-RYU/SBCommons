@@ -6,7 +6,7 @@ var str = "Hello, playground"
 
 //: [Next](@next)
 
-class Person : Equatable {
+class Person {
   let ssn  : String
   let name : String
   let age  : UInt
@@ -18,6 +18,7 @@ class Person : Equatable {
   }
 }
 
+extension Person : Equatable {}
 func == (lhs:Person, rhs:Person) -> Bool {
   return lhs.ssn == rhs.ssn
 }
@@ -26,11 +27,18 @@ let p1 = Person (ssn: "123", name: "Zack", age: 10)
 let p2 = Person (ssn: "321", name: "Zoey", age: 9)
 let p3 = Person (ssn: "790", name: "Xena", age: 4)
 
-let younger = min(AsComparable (item: p1, value: p1.age), AsComparable (item: p2, value: p2.age)).item
+let younger = min (AsComparable (item: p1, value: p1.age),
+                   AsComparable (item: p2, value: p2.age)).item
 younger.name
 
 var people = [p1, p2, p3]
-var alphabetized = people.map { AsComparable(item: $0, value: $0.name) }.sort().map { $0.item }
-alphabetized
-alphabetized[0].name
 
+var alphabetized = people.map { AsComparable(item: $0, value: $0.name) }
+  .sorted()
+  .map { $0.item }
+
+alphabetized
+
+alphabetized.first?.name
+
+1

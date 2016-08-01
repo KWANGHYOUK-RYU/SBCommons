@@ -17,13 +17,13 @@ public struct AsEquatable<Value:Equatable, Item> : Equatable {
   /** The arbitrary item */
   public var item: Item
   
-  public init (value: Value, item: Item) {
+  public init (item: Item, value: Value) {
     self.value = value
     self.item  = item
   }
   
   public init (item: Item, toValue: (Item) -> Value) {
-    self.init (value: toValue(item), item: item)
+    self.init (item: item, value: toValue(item))
   }
 }
 
