@@ -42,3 +42,10 @@ alphabetized
 alphabetized.first?.name
 
 1
+
+
+let personByName = AsEquatable (item: p1, value: p1.name)
+
+
+
+2

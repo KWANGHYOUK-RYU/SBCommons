@@ -11,7 +11,7 @@ import Foundation
 
 class FuncTests: XCTestCase {
 
-  func allEven <S:Sequence where Int == S.Iterator.Element> (_ source: S) -> Bool {
+  func allEven <S:Sequence> (_ source: S) -> Bool where Int == S.Iterator.Element {
     return source.all { 0 == $0 % 2 }
   }
   
@@ -24,7 +24,7 @@ class FuncTests: XCTestCase {
   }
   
   func testAlways() {
-    XCTAssertEqual(always(1)(y:2), 1)
+    XCTAssertEqual(always(1)(2), 1)
   }
   
   func testComplement () {

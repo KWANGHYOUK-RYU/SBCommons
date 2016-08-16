@@ -14,7 +14,7 @@ public enum Result<V,E:Error> : CustomStringConvertible, CustomDebugStringConver
   case failure(E)
 
   /** Apply `f` to the `Result` value returning the result; otherwise return error */
-  public func map<P>( _ f: @noescape(V) -> P) -> Result<P,E> {
+  public func map<P>( _ f: (V) -> P) -> Result<P,E> {
     switch self {
     case .success(let value):
       return .success(f(value))
@@ -24,7 +24,7 @@ public enum Result<V,E:Error> : CustomStringConvertible, CustomDebugStringConver
   }
 
   /** Apply `f` to the `Result` value returning the result; otherwsise return error */
-  public func flatMap<P> ( _ f: @noescape(V) -> Result<P,E>) -> Result<P,E> {
+  public func flatMap<P> ( _ f: (V) -> Result<P,E>) -> Result<P,E> {
     switch self {
     case .success(let value):
       return f (value)
@@ -90,7 +90,7 @@ public enum Result<V,E:Error> : CustomStringConvertible, CustomDebugStringConver
    *
    * - returns: A function of (V!, E!) that applies `f` to `E` or to `V`.
    */
-  public static func handler (_ f:(Result<V,E>) -> Void) -> (V?, E?) -> Void {
+  public static func handler (_ f: @escaping (Result<V,E>) -> Void) -> (V?, E?) -> Void {
     return { (value:V?, error:E?) in
       if nil != error { f (Result.failure(error!)) }
       if nil != value { f (Result.success(value!)) }

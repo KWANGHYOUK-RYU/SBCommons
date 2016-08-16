@@ -2,9 +2,9 @@
 
 Commons is a collection of largely standalone Swift abstractions.
 
+[![Swift 3.0](https://img.shields.io/badge/Swift-3.0-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Platforms OS X | Linux](https://img.shields.io/badge/Platforms-OS%20X%20%7C%20Linux%20-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
 ![License](https://img.shields.io/cocoapods/l/SBCommons.svg)
-[![Language](https://img.shields.io/badge/lang-Swift-orange.svg?style=flat)](https://developer.apple.com/swift/)
-![Platform](https://img.shields.io/cocoapods/p/SBCommons.svg)
 ![](https://img.shields.io/badge/Package%20Maker-compatible-orange.svg)
 [![Version](https://img.shields.io/cocoapods/v/SBCommons.svg)](http://cocoapods.org)
 

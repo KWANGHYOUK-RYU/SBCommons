@@ -32,7 +32,7 @@
 		3CE5D17F1C136B1300550AD6 /* SBCommons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SBCommons.h; sourceTree = "<group>"; };
 		3CE5D1811C136B1300550AD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3CE5D1861C136B1300550AD6 /* SBCommonsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SBCommonsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3CE5D18D1C136B1300550AD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3CE5D18D1C136B1300550AD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../Info.plist; sourceTree = "<group>"; };
 		3CE5D1981C136B7A00550AD6 /* Func.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Func.swift; sourceTree = "<group>"; };
 		3CE5D19A1C136B8200550AD6 /* AnyAs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyAs.swift; sourceTree = "<group>"; };
 		3CE5D19C1C136BA400550AD6 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
