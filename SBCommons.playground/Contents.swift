@@ -4,6 +4,17 @@ import SBCommons
 
 var str = "Hello, playground"
 
+var foo = [String:Int]()
+foo
+foo["a"] = 10
+foo
+
+foo.updateValue(20, forKey: "a")  // returns old, if exists.
+
+var bar = Dictionary<String,Int>()
+bar["b"] = 1
+bar
+
 //: [Next](@next)
 
 class Person {
@@ -43,9 +54,48 @@ alphabetized.first?.name
 
 1
 
-
 let personByName = AsEquatable (item: p1, value: p1.name)
 
 
+var s1 = Set<AsHashable<String,Person>>()
+s1.insert(AsHashable(item: p1, value: p1.name))
+s1
+
 
 2
+
+var person_by_age_builder = AsComparable<UInt,Person>.builder { (p:Person) in p.age }
+
+var p1ac = person_by_age_builder(p1)
+var p2ac = person_by_age_builder(p2)
+
+p1ac < p2ac
+
+//var person_by_ssn_builder = AsComparable<String,Person>.builder { Person.ssn }
+
+struct Contract {
+  let person : Person
+}
+
+class Employer {
+  var contracts = Dictionary<AsHashable<String,Person>,Contract>()
+
+  func employ (person: Person) {
+    contracts[AsHashable(item: person, value: person.ssn)] = Contract(person: person)
+    return
+  }
+}
+
+3
+
+var e1 = Employer()
+e1.employ(person: p1)
+e1.contracts.count
+e1.contracts
+
+
+/*
+}
+var e1 = Employer()
+e1
+*/

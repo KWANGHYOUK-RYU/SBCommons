@@ -50,15 +50,23 @@ public struct AsComparable<Value:Comparable, Item> : Comparable {
   public init (item: Item, toValue: (Item) -> Value) {
     self.init (item: item, value: toValue(item))
   }
+
+  public static func builder<Value:Comparable, Item> (toValue: @escaping (Item) -> Value) -> (Item) -> AsComparable<Value,Item> {
+    return { AsComparable<Value, Item> (item: $0, toValue: toValue) }
+  }
+
+  // Comparable Operators
+
+  public static func == <Value:Comparable, Item> (lhs:AsComparable<Value, Item>, rhs:AsComparable<Value,Item>) -> Bool {
+    return lhs.value == rhs.value
+  }
+
+  public static func < <Value:Comparable, Item> (lhs:AsComparable<Value, Item>, rhs:AsComparable<Value,Item>) -> Bool {
+    return lhs.value < rhs.value
+  }
+
 }
 
-public func == <Value:Comparable, Item> (lhs:AsComparable<Value, Item>, rhs:AsComparable<Value,Item>) -> Bool {
-  return lhs.value == rhs.value
-}
-
-public func < <Value:Comparable, Item> (lhs:AsComparable<Value, Item>, rhs:AsComparable<Value,Item>) -> Bool {
-  return lhs.value < rhs.value
-}
 
 // MARK: As Comparable Invert
 
